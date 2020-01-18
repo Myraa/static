@@ -1,14 +1,11 @@
 pipeline{
     agent any
     stages {
-        stage('build'){
+        stage('Upload to AWS'){
             steps{
-                sh 'echo "hello world"'
-                sh '''
-                    echo "multi line shell steps works too"
-                    ls -alh
-                    '''
-
+                withAWS(credentials: 'blueocean', region: 'us-east-1') {
+                    sh 'echo "hello S3"'
+                    s3Upload acl: 'Private', bucket: 'staticjenkinspboddubucket', file: 'index.txt'
             }
         }
     }
